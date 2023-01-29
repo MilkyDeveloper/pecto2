@@ -26,10 +26,10 @@ export function NewPack() {
 
 	useEffect(() => {
 		if (user === null) {
-			Store.newPack(id, BasePack())
+			Store.newPack(id, {...BasePack(), uuid: id})
 			navigate(`/view/me/${id}`)
 		} else {
-			Store.newPack(id, {...BasePack(), uid: user.uid})
+			Store.newPack(id, {...BasePack(), uid: user.uid, uuid: id, author: user.displayName})
 			navigate(`/view/${user.displayName}/${id}`)
 		}
     }, [])

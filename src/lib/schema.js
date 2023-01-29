@@ -1,13 +1,12 @@
-import { v4 as uuidv4 } from 'uuid'
-
 const BasePack = () => {
 	return {
 		name: '',
 		class: '',
-		author: 'Me (not logged in)',
+		author: 'me',
+		superficialAuthor: 'Me (Locally Saved)',
 		date: new Date(Date.now()).toLocaleString().split(',')[0],
 		uid: null, // Must be defined when imported to Firestore
-		uuid: uuidv4(),
+		uuid: '',
 		published: false,
 		categories: {'Default': ['transparent', 'transparent']},
 		content: [

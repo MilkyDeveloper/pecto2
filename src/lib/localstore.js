@@ -11,9 +11,7 @@ db.version(1).stores({
 // my code doesn't make errors
 
 const addNewPack = async(id, newPack) => {
-	// TODO: fix lazy
-	await db.packs.delete(id)
-	await db.packs.add({ id: id, ...newPack })
+	await db.packs.put({ id: id, ...newPack })
 }
 
 const deletePack = async(id) => {

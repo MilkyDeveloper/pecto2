@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
@@ -20,6 +20,8 @@ import { useNavigate } from 'react-router-dom'
 
 import { LinkContainer } from 'react-router-bootstrap'
 
+import { Store } from './lib/store'
+
 import './Root.scss'
 
 function Root() {
@@ -27,6 +29,16 @@ function Root() {
     const navigate = useNavigate()
 
     const [search, setSearch] = useState('')
+
+    useEffect(() => {
+        if (user?.displayName !== undefined) {
+            console.log('eatdoodoo')
+            Store.authenticated = true
+        } else {
+            Store.authenticated = false
+        }
+    }, [user])
+    
 
     async function handleAuthClick() {
         if (user) {
@@ -103,7 +115,8 @@ function Root() {
             <div id="detail">
                 <UserContext.Provider
                     value={{ user: user, loading: loading, error: error }}
-                >
+                >   
+                    
                     <Outlet />
                 </UserContext.Provider>
             </div>

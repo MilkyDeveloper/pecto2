@@ -3,13 +3,12 @@ import React from 'react'
 import { useContext, useState, useEffect } from 'react'
 import { PackContext, EditorContext } from '@/lib/context'
 
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tooltip from 'react-bootstrap/Tooltip'
-import { LinkContainer } from 'react-router-bootstrap'
 import Modal from 'react-bootstrap/Modal'
 
 import { StoreInstance as Store } from '@/lib/store'
@@ -100,7 +99,7 @@ export function Metadata() {
                             className="form-control w-75"
                             onChange={(e) => setName(e.target.value)}/>
                         <p>
-                            Author: <LinkContainer className="link-primary" to={`/view/${pack.author}`}><b>@{pack.author}</b></LinkContainer>
+                            Author: <Link to={`/view/${pack.author}`}><b>{pack.superficialAuthor}</b></Link>
                         </p>
                     </div>
 
@@ -178,7 +177,7 @@ export function Metadata() {
                         )}
                     </h1>
                     <p>
-                        Author: <LinkContainer className="link-primary" to={`/view/${pack.author}`}><b>@{pack.author}</b></LinkContainer>
+                        Author: <Link className="link-primary" to={`/view/${pack.author}`}><b>{pack.superficialAuthor}</b></Link>
                     </p>
                 </div>
 

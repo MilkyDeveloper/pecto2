@@ -37,7 +37,7 @@ function Pack() {
 
     // if (error) return <div>Could not retrieve test.json - make dynamic</div>
     // if (isLoading) return <div>Loading</div>
-    if (pack.content === undefined) {
+    if (pack?.content === undefined) {
         return <div>Pack Not Found</div>
     }
 

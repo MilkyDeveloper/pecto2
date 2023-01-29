@@ -8,7 +8,6 @@ import {
 	deletePack as deletePackLocal,
 	getMyPacks as getMyPacksLocal
 } from './localstore'
-import { getAuth } from 'firebase/auth'
 
 // We really don't need this as a class,
 // just in-case we can't use getAuth this exists
@@ -51,6 +50,7 @@ class Store {
 	}
 
 	getMyPacks() {
+		console.log('auth status:', this._authenticated)
 		if (this._authenticated) {
 			return getMyPacksCloud()
 		} else {
@@ -59,10 +59,9 @@ class Store {
 	}
 
     set authenticated(isAuth) {
+		console.log('setting auth to', isAuth)
         this._authenticated = isAuth
     }
 }
 
-const StoreInstance = new Store(getAuth().CurrentUser)
-
-export { StoreInstance }
+export { Store }

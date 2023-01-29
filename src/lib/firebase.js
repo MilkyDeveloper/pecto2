@@ -60,19 +60,22 @@ const signOutOfGoogle = async () => {
 }
 
 const addNewPack = async (id, newPack) => {
-    console.log(auth)
-    const docRef = doc(db, "packs", auth.displayName, "packs", id)
+    const user = getAuth().currentUser
+    const docRef = doc(db, "packs", user.displayName, "packs", id)
     await setDoc(docRef, newPack)
 }
 
 const deletePack = async (id) => {
-    const docRef = doc(db, "packs", auth.displayName, "packs", id)
+    const user = getAuth().currentUser
+    const docRef = doc(db, "packs", user.displayName, "packs", id)
     await deleteDoc(docRef)
 }
 
 const getMyPacks = async () => {
+    const user = getAuth().currentUser
     let packs = []
-    const userPacks = await getDocs(collection(db, "packs", auth.displayName, "packs"))
+    console.log(user)
+    const userPacks = await getDocs(collection(db, "packs", user.displayName, "packs"))
     userPacks.forEach(doc => {
         packs.push(doc.data())
     })

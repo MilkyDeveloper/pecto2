@@ -9,25 +9,25 @@ function Home() {
     const [usersPacks, setUsersPacks] = useState([])
 
     useEffect(() => {
-        if (usersPacks.length == 0 && !loading) setUsersPacks(Store.getMyPacks())
+        async function setPacks () { setUsersPacks(await Store.getMyPacks()) }
+        if (usersPacks.length == 0 && user?.displayName != null) setPacks()
     }, [loading])
 
-    try {
-        user.displayName
-    } catch {
-        return (
-            <div className="container text-center">
-                <div className="m-3">
-                    Sign in for a personalized home-page
-                </div>
-            </div>
-        )
-    }
+    // try {
+    //     user.displayName
+    // } catch {
+    //     return (
+    //         <div className="container text-center">
+    //             <div className="m-3">
+    //                 Sign in for a personalized home-page
+    //             </div>
+    //         </div> 
+    //     )
+    // }
     return (
         <div className="container">
             <div className="m-3">
-                <h3>Your Packs</h3>
-                <UserPacks packs={usersPacks}/>
+                <UserPacks canEdit packs={usersPacks} title="Your Packs"/>
             </div>
         </div>
     )
