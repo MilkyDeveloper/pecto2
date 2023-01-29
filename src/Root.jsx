@@ -116,7 +116,6 @@ function Root() {
                 <UserContext.Provider
                     value={{ user: user, loading: loading, error: error }}
                 >   
-                    
                     <Outlet />
                 </UserContext.Provider>
             </div>
