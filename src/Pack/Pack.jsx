@@ -17,11 +17,17 @@ import './Pack.scss'
 
 import { AnimatePresence } from 'framer-motion'
 
+// RECOIL
+import { useRecoilState } from "recoil"
+import { packAtom } from '@/atoms/pack/viewer'
+import { editorAtom } from '@/atoms/pack/editor'
+
 function Pack() {
     const { displayName, packId } = useParams()
     // We wrap useState around this so we can modify it (ex. adding new cards)
     //const { pack: ogPack, mutate, isLoading, error } = usePack(packId)
-    const [pack, setPack] = useState({})
+    const [pack, setPack] = useRecoilState(packAtom)
+    const [editor, setEditor] = useRecoilState(editorAtom)
     //const { pack, setPack } = useState(ogPack)
     const user = useContext(UserContext).user
 
@@ -41,22 +47,22 @@ function Pack() {
         return <div>Pack Not Found</div>
     }
 
-    let editor = false
-
-    try {
-        if (user.uid == pack.uid) editor = true
-    } catch (err) {
-        editor = false
-    }
+    if (user?.uid == pack.uid) setEditor(true)
 
     async function newCards() {
-        // Add new terms
-        pack.content.push({
-            term: '',
-            definition: '',
-            category: 'Default'
+        setPack((oldPack) => {
+            return {
+                ...oldPack,
+                content: [
+                    ...oldPack.content,
+                    {
+                        term: '',
+                        definition: '',
+                        category: 'Default'
+                    }
+                ]
+            }
         })
-        setPack({ ...pack })
     }
 
     async function saveCards() {
@@ -71,31 +77,31 @@ function Pack() {
     return (
         <div id="packRoot" className="mx-auto border border-2 p-4 rounded-3">
 
-            <EditorContext.Provider value={{ editor: editor, setPack: setPack }}>
-                <PackContext.Provider value={pack}>
-                    <Metadata />
+            {/* <EditorContext.Provider value={{ editor: editor, setPack: setPack }}>
+                <PackContext.Provider value={pack}> */}
+                    {/* <Metadata /> */}
 
-                    <FlashcardView />
+                    {/* <FlashcardView /> */}
 
                     <div id="packContentContainer" className="mt-3 border border-2 rounded-3 p-4">
                         <AnimatePresence>
                             {pack.content.map((cards, index) => (
-                                <CardsContext.Provider
-                                    key={index}
-                                    value={{
-                                        term: cards.term,
-                                        definition: cards.definition,
-                                        category: cards.category,
-                                        id: index,
-                                    }}
-                                >
-                                    <Cards />
-                                </CardsContext.Provider>
+                                // <CardsContext.Provider
+                                //     key={index}
+                                //     value={{
+                                //         term: cards.term,
+                                //         definition: cards.definition,
+                                //         category: cards.category,
+                                //         id: index,
+                                //     }}
+                                // >
+                                    <Cards key={index} cards={cards} index={index} />
+                                // </CardsContext.Provider>
                             ))}
                         </AnimatePresence>
                     </div>
-                </PackContext.Provider>
-            </EditorContext.Provider>
+                {/* </PackContext.Provider>
+            </EditorContext.Provider> */}
             
             {editor ? (
                 <div id="parentToolbar" className="d-flex justify-content-between fixed-bottom" style={{transform: 'translateY(-75%)'}}>

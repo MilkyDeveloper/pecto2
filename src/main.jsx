@@ -8,6 +8,7 @@ import { NewPack } from './Pack/NewPack'
 import { UserView } from './UserView'
 import { SearchPacks } from './SearchPacks'
 import Home from './Home'
+import { RecoilRoot } from 'recoil'
 
 const router = createBrowserRouter([
     {
@@ -40,6 +41,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <RouterProvider router={router} />
+        <RecoilRoot>
+            <RouterProvider router={router} />
+        </RecoilRoot>
     </React.StrictMode>
 )

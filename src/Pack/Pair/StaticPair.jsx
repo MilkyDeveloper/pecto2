@@ -1,8 +1,10 @@
 import React from 'react'
-import { CardsContext } from '@/lib/context'
+import { useRecoilValue } from "recoil"
+import { cardAtom } from '@/atoms/pack/viewer'
 
 function StaticPair() {
-    const cards = React.useContext(CardsContext)
+    const cards = useRecoilValue(cardAtom)
+    console.log()
 
     // Muy padding
     return (

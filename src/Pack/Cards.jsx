@@ -1,8 +1,8 @@
+/* eslint-disable react/prop-types */
 import React from 'react'
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import StaticPair from './Pair/StaticPair'
 import EditingPair from './Pair/EditingPair'
-import { EditorContext, CardsContext, PackContext } from '@/lib/context.js'
 import { hslToHex } from '@/lib/utilities'
 
 import Button from 'react-bootstrap/Button'
@@ -12,10 +12,18 @@ import Modal from 'react-bootstrap/Modal'
 
 import { motion } from "framer-motion"
 
-function Cards() {
-    const editor = useContext(EditorContext)
-    const cards = useContext(CardsContext)
-    const pack = useContext(PackContext)
+// RECOIL
+import { useRecoilState, useRecoilValue } from "recoil"
+import { packAtom, cardAtom } from '@/atoms/pack/viewer'
+import { editorAtom } from '@/atoms/pack/editor'
+
+function Cards(props) {
+    const editor = useRecoilValue(editorAtom)
+    const [pack, setPack] = useRecoilState(packAtom)
+    const [_, setCards] = useRecoilState(cardAtom)
+
+    setCards(props.cards)
+
     const [editing, setEditing] = useState(false)
 
     // New Category modal
@@ -24,19 +32,27 @@ function Cards() {
     const [newColor, setNewColor] = useState(['', ''])
 
     function deletePair() {
-        pack.content.splice(cards.id, 1)
-        editor.setPack({ ...pack })
+        setPack((oldPack) => {
+            oldPack.content.splice(props.index, 1)
+        })
     }
 
     function submitNewCategory() {
-        pack.categories[newCategory] = newColor
-        editor.setPack({ ...pack })
+        setPack((oldPack) => { return {
+            ...oldPack,
+            categories: [
+                ...oldPack.categories,
+                newColor
+            ]
+        }})
         setShow(false)
     }
 
     function setCardCategory(category) {
-        pack.content[cards.id]['category'] = category
-        editor.setPack({ ...pack })
+        setPack((pack) => {
+            pack.content[props.index]['category'] = category
+            return pack
+        })
     }
 
     function generateNewColor() {
@@ -55,10 +71,10 @@ function Cards() {
         )
     } else {
         return (
-            <motion.div key={cards.id} animate={{ x: 0 }} initial={{ x: 100 }} exit={{ x: -100, opacity: 0 }} className="p-3" style={{backgroundImage: `linear-gradient(to right, ${pack.categories[cards.category][0]},${pack.categories[cards.category][1]})`}}>
+            <motion.div key={props.index} animate={{ x: 0 }} initial={{ x: 100 }} exit={{ x: -100, opacity: 0 }} className="p-3" style={{backgroundImage: `linear-gradient(to right, ${pack.categories[props.cards.category][0]},${pack.categories[props.cards.category][1]})`}}>
                 {editor.editor ? (
                     <DropdownButton
-                        title={cards.category}
+                        title={props.cards.category}
                         size="sm"
                         className="ms-2"
                         variant="outline-dark rounded-5"
@@ -74,7 +90,7 @@ function Cards() {
                         </Dropdown.Item>
                     </DropdownButton>
                 ) : (
-                    <div className="badge bg-primary ms-2">{cards.category}</div>
+                    <div className="badge bg-primary ms-2">{props.cards.category}</div>
                 )}
                 <StaticPair />
                 {editor ? (
@@ -87,7 +103,7 @@ function Cards() {
                         >
                             Edit
                         </Button>
-                        {cards.id > 0 && (
+                        {props.index > 0 && (
                             <Button
                                 className="text-muted text-decoration-none"
                                 variant="link"
